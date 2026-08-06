@@ -1,0 +1,31 @@
+CHURN PREDICTION - MODEL RESULTS
+==================================================
+Data source: Synthetic (dev/test)
+Dataset shape: (2000, 21)
+
+
+--- Logistic Regression ---
+Accuracy: 0.6525
+Top 3 predictive features: [('Contract', np.float64(0.6423)), ('tenure_group', np.float64(0.5985)), ('tenure', np.float64(0.3226))]
+              precision    recall  f1-score   support
+
+           0       0.68      0.62      0.65       207
+           1       0.63      0.68      0.66       193
+
+    accuracy                           0.65       400
+   macro avg       0.65      0.65      0.65       400
+weighted avg       0.65      0.65      0.65       400
+
+
+--- Decision Tree ---
+Accuracy: 0.6075
+Top 3 predictive features: [('Contract', np.float64(0.4314)), ('tenure', np.float64(0.2051)), ('MonthlyCharges', np.float64(0.1007))]
+              precision    recall  f1-score   support
+
+           0       0.64      0.57      0.60       207
+           1       0.58      0.65      0.62       193
+
+    accuracy                           0.61       400
+   macro avg       0.61      0.61      0.61       400
+weighted avg       0.61      0.61      0.61       400
+
