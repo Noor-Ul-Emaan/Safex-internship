@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ledger — Financial KPI Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="dashboard_data.js"></script>
+<style>
+  :root{
+    --ink:#14181f;
+    --ink-soft:#232a35;
+    --paper:#f1eee4;
+    --paper-line:#dcd6c4;
+    --forest:#2f6f5e;
+    --forest-soft:#e4ede9;
+    --brick:#b4442e;
+    --brick-soft:#f4e4de;
+    --gold:#b8901f;
+    --slate:#2b3a55;
+    --text-on-paper:#20242c;
+    --text-muted:#6b6656;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--text-on-paper);
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    line-height:1.5;
+  }
+  .masthead{
+    background:var(--ink);
+    color:var(--paper);
+    padding:28px clamp(20px,4vw,56px) 22px;
+    border-bottom:3px solid var(--gold);
+  }
+  .masthead-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:14px;
+    max-width:1240px;
+    margin:0 auto;
+  }
+  .masthead h1{
+    font-family:'Source Serif 4',serif;
+    font-weight:700;
+    font-size:clamp(28px,3.4vw,40px);
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .masthead .sub{
+    font-size:13.5px;
+    color:#b9bfc9;
+    margin-top:6px;
+  }
+  .masthead .meta{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:#9aa3b0;
+    text-align:right;
+    line-height:1.7;
+  }
+  .meta span{color:var(--paper);}
+
+  nav.tabs{
+    background:var(--ink-soft);
+    display:flex;
+    gap:2px;
+    padding:0 clamp(20px,4vw,56px);
+    max-width:1240px;
+    margin:0 auto;
+    overflow-x:auto;
+  }
+  nav.tabs button{
+    background:none;
+    border:none;
+    color:#c3c9d2;
+    font-family:'Inter',sans-serif;
+    font-size:13.5px;
+    font-weight:500;
+    padding:13px 18px;
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    white-space:nowrap;
+    transition:color .15s, border-color .15s;
+  }
+  nav.tabs button:hover{color:#fff;}
+  nav.tabs button.active{color:#fff;border-bottom-color:var(--gold);}
+
+  main{
+    max-width:1240px;
+    margin:0 auto;
+    padding:32px clamp(20px,4vw,56px) 80px;
+  }
+  section.view{display:none;}
+  section.view.active{display:block;animation:fadeIn .25s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  h2.section-title{
+    font-family:'Source Serif 4',serif;
+    font-size:22px;
+    font-weight:600;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  p.section-note{
+    color:var(--text-muted);
+    font-size:13.5px;
+    margin:0 0 22px;
+  }
+
+  .kpi-row{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:14px;
+    margin-bottom:30px;
+  }
+  .kpi-card{
+    background:#fff;
+    border:1px solid var(--paper-line);
+    border-left:4px solid var(--slate);
+    padding:16px 18px;
+  }
+  .kpi-card .label{
+    font-size:12.5px;
+    color:var(--text-muted);
+    margin-bottom:8px;
+  }
+  .kpi-card .value{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:26px;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .kpi-card .delta{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    margin-top:8px;
+  }
+  .delta.up{color:var(--forest);}
+  .delta.down{color:var(--brick);}
+
+  .panel{
+    background:#fff;
+    border:1px solid var(--paper-line);
+    padding:20px 22px;
+    margin-bottom:22px;
+  }
+  .panel-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:14px;
+  }
+  .panel-head h3{
+    font-family:'Source Serif 4',serif;
+    font-size:16.5px;
+    font-weight:600;
+    margin:0;
+    color:var(--ink);
+  }
+  .panel-head .hint{font-size:12px;color:var(--text-muted);}
+  .grid-2{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;}
+  @media (max-width:860px){.grid-2{grid-template-columns:1fr;}}
+  canvas{max-width:100%;}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  thead th{
+    text-align:left;
+    font-weight:600;
+    font-size:11.5px;
+    color:var(--text-muted);
+    border-bottom:1px solid var(--paper-line);
+    padding:8px 10px;
+  }
+  tbody td{
+    padding:9px 10px;
+    border-bottom:1px solid #ece7d9;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.8px;
+  }
+  tbody td.name{font-family:'Inter',sans-serif;font-size:13.5px;}
+  tbody tr:hover{background:#faf8f2;}
+  .num{text-align:right;}
+  .pos{color:var(--forest);}
+  .neg{color:var(--brick);}
+
+  .pill-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .pill{
+    border:1px solid var(--paper-line);
+    background:#fff;
+    padding:8px 14px;
+    font-size:13px;
+    font-weight:500;
+    cursor:pointer;
+    color:var(--text-on-paper);
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  .pill:hover{border-color:var(--slate);}
+  .pill.active{background:var(--slate);border-color:var(--slate);color:#fff;}
+
+  .drill-orders{margin-top:16px;}
+  .drill-orders .panel-head .hint{font-family:'IBM Plex Mono',monospace;}
+
+  footer{
+    text-align:center;
+    font-size:12px;
+    color:var(--text-muted);
+    padding:30px 20px 40px;
+  }
+  .badge{
+    display:inline-block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    padding:2px 7px;
+    border:1px solid var(--paper-line);
+    color:var(--text-muted);
+    margin-left:8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-row">
+    <div>
+      <h1>Ledger</h1>
+      <div class="sub">Financial KPI dashboard — e-commerce retail</div>
+    </div>
+    <div class="meta">
+      REPORTING YEAR <span id="report-year"></span><br>
+      LAST REFRESH <span id="report-refresh"></span>
+    </div>
+  </div>
+</div>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-view="overview">Overview</button>
+  <button class="tab-btn" data-view="trends">Trends</button>
+  <button class="tab-btn" data-view="variance">Variance to budget</button>
+  <button class="tab-btn" data-view="drilldown">Drill-down</button>
+</nav>
+
+<main>
+
+  <!-- OVERVIEW -->
+  <section class="view active" id="overview">
+    <h2 class="section-title">Year at a glance</h2>
+    <p class="section-note">Revenue, expense, and profit position across the full reporting year, rolled up from order-level data.</p>
+
+    <div class="kpi-row" id="kpi-row"></div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Revenue by product line</h3>
+          <span class="hint">monthly, stacked</span>
+        </div>
+        <canvas id="chart-rev-breakdown" height="260"></canvas>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Expense composition</h3>
+          <span class="hint" id="exp-month-label"></span>
+        </div>
+        <canvas id="chart-exp-breakdown" height="260"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRENDS -->
+  <section class="view" id="trends">
+    <h2 class="section-title">Monthly trend</h2>
+    <p class="section-note">Revenue, expense, and net profit tracked month over month.</p>
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Revenue / expense / profit</h3>
+        <span class="hint">12-month trailing</span>
+      </div>
+      <canvas id="chart-trend" height="110"></canvas>
+    </div>
+  </section>
+
+  <!-- VARIANCE -->
+  <section class="view" id="variance">
+    <h2 class="section-title">Variance to budget</h2>
+    <p class="section-note">How actuals compared with the budget finance planned for, by month and by line item.</p>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Revenue &amp; expense variance</h3>
+        <span class="hint">% over / under budget, by month</span>
+      </div>
+      <canvas id="chart-variance" height="110"></canvas>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Line-item variance</h3>
+        <span class="hint" id="variance-month-label"></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Type</th>
+            <th class="num">Actual</th>
+            <th class="num">Budget</th>
+            <th class="num">Variance</th>
+            <th class="num">% Var</th>
+          </tr>
+        </thead>
+        <tbody id="variance-table-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- DRILLDOWN -->
+  <section class="view" id="drilldown">
+    <h2 class="section-title">Drill down: product line → orders</h2>
+    <p class="section-note">Select a product line to see its monthly trend and the underlying order line items.</p>
+
+    <div class="pill-group" id="drill-pills"></div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <h3 id="drill-chart-title">Monthly revenue</h3>
+          <span class="hint">selected product line</span>
+        </div>
+        <canvas id="chart-drill" height="230"></canvas>
+      </div>
+      <div class="panel drill-orders">
+        <div class="panel-head">
+          <h3>Top orders</h3>
+          <span class="hint" id="drill-order-count"></span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Date</th>
+              <th>Channel</th>
+              <th class="num">Units</th>
+              <th class="num">Revenue</th>
+            </tr>
+          </thead>
+          <tbody id="drill-orders-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Ledger — Financial KPI Analytics Dashboard · built as a portfolio MVP on synthetic order data<span class="badge">MVP</span>
+</footer>
+
+<script>
+const fmtCurrency = n => '$' + Number(n).toLocaleString('en-US', {maximumFractionDigits:0});
+const fmtCurrencyPrecise = n => '$' + Number(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtPct = n => (n > 0 ? '+' : '') + Number(n).toFixed(1) + '%';
+
+const PALETTE = ['#2f6f5e', '#b8901f', '#2b3a55', '#b4442e', '#6b6656', '#8fa998'];
+
+document.getElementById('report-year').textContent = '2025';
+document.getElementById('report-refresh').textContent = new Date().toISOString().slice(0,10);
+
+// ---- Tabs ----
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.view).classList.add('active');
+  });
+});
+
+// ---- KPI cards ----
+const kpiRow = document.getElementById('kpi-row');
+DASHBOARD_DATA.kpi_cards.forEach(card => {
+  const isUp = card.delta_pct >= 0;
+  const val = card.format === 'percent' ? card.value.toFixed(1) + '%' : fmtCurrency(card.value);
+  const el = document.createElement('div');
+  el.className = 'kpi-card';
+  el.innerHTML = `
+    <div class="label">${card.label}</div>
+    <div class="value">${val}</div>
+    <div class="delta ${isUp ? 'up' : 'down'}">${fmtPct(card.delta_pct)} · ${card.delta_label}</div>
+  `;
+  kpiRow.appendChild(el);
+});
+
+// ---- Revenue breakdown (stacked bar) ----
+new Chart(document.getElementById('chart-rev-breakdown'), {
+  type: 'bar',
+  data: {
+    labels: DASHBOARD_DATA.revenue_breakdown.labels,
+    datasets: DASHBOARD_DATA.revenue_breakdown.series.map((s,i) => ({
+      label: s.name,
+      data: s.data,
+      backgroundColor: PALETTE[i % PALETTE.length],
+    }))
+  },
+  options: {
+    responsive:true,
+    plugins:{legend:{position:'bottom', labels:{boxWidth:11, font:{size:11}}}},
+    scales:{
+      x:{stacked:true, grid:{display:false}},
+      y:{stacked:true, ticks:{callback:v=>fmtCurrency(v)}}
+    }
+  }
+});
+
+// ---- Expense breakdown (doughnut) ----
+document.getElementById('exp-month-label').textContent = DASHBOARD_DATA.expense_breakdown.month;
+new Chart(document.getElementById('chart-exp-breakdown'), {
+  type: 'doughnut',
+  data: {
+    labels: DASHBOARD_DATA.expense_breakdown.labels,
+    datasets: [{
+      data: DASHBOARD_DATA.expense_breakdown.values,
+      backgroundColor: PALETTE,
+      borderColor:'#fff',
+      borderWidth:2,
+    }]
+  },
+  options: {
+    responsive:true,
+    plugins:{legend:{position:'bottom', labels:{boxWidth:11, font:{size:11}}}}
+  }
+});
+
+// ---- Trend chart ----
+new Chart(document.getElementById('chart-trend'), {
+  type: 'line',
+  data: {
+    labels: DASHBOARD_DATA.trend.labels,
+    datasets: [
+      {label:'Revenue', data:DASHBOARD_DATA.trend.revenue, borderColor:'#2b3a55', backgroundColor:'#2b3a5522', tension:.3, fill:false},
+      {label:'Expense', data:DASHBOARD_DATA.trend.expense, borderColor:'#b4442e', backgroundColor:'#b4442e22', tension:.3, fill:false},
+      {label:'Profit', data:DASHBOARD_DATA.trend.profit, borderColor:'#2f6f5e', backgroundColor:'#2f6f5e22', tension:.3, fill:true},
+    ]
+  },
+  options: {
+    responsive:true,
+    plugins:{legend:{position:'bottom', labels:{boxWidth:11, font:{size:11}}}},
+    scales:{ y:{ticks:{callback:v=>fmtCurrency(v)}}, x:{grid:{display:false}} }
+  }
+});
+
+// ---- Variance chart ----
+new Chart(document.getElementById('chart-variance'), {
+  type: 'bar',
+  data: {
+    labels: DASHBOARD_DATA.variance_by_month.map(r=>r.month),
+    datasets: [
+      {label:'Revenue variance %', data:DASHBOARD_DATA.variance_by_month.map(r=>r.revenue_variance_pct), backgroundColor:'#2f6f5e'},
+      {label:'Expense variance %', data:DASHBOARD_DATA.variance_by_month.map(r=>r.expense_variance_pct), backgroundColor:'#b4442e'},
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'bottom', labels:{boxWidth:11, font:{size:11}}}},
+    scales:{ y:{ticks:{callback:v=>v+'%'}}, x:{grid:{display:false}} }
+  }
+});
+
+// ---- Variance table (latest month detail) ----
+document.getElementById('variance-month-label').textContent =
+  DASHBOARD_DATA.trend.labels[DASHBOARD_DATA.trend.labels.length - 1];
+const varBody = document.getElementById('variance-table-body');
+DASHBOARD_DATA.latest_month_variance_detail.forEach(r => {
+  const cls = r.variance >= 0 ? 'pos' : 'neg';
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="name">${r.category}</td>
+    <td>${r.type}</td>
+    <td class="num">${fmtCurrencyPrecise(r.amount_actual)}</td>
+    <td class="num">${fmtCurrencyPrecise(r.amount_budget)}</td>
+    <td class="num ${cls}">${fmtCurrencyPrecise(r.variance)}</td>
+    <td class="num ${cls}">${fmtPct(r.variance_pct)}</td>
+  `;
+  varBody.appendChild(tr);
+});
+
+// ---- Drill-down ----
+let drillChart = null;
+const pillWrap = document.getElementById('drill-pills');
+const productLines = DASHBOARD_DATA.product_lines;
+
+function renderDrill(line) {
+  document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.dataset.line === line));
+  document.getElementById('drill-chart-title').textContent = `Monthly revenue — ${line}`;
+
+  const d = DASHBOARD_DATA.drilldown[line];
+  if (drillChart) drillChart.destroy();
+  drillChart = new Chart(document.getElementById('chart-drill'), {
+    type:'bar',
+    data:{
+      labels: DASHBOARD_DATA.months,
+      datasets:[{label:'Revenue', data:d.monthly_revenue, backgroundColor:'#2b3a55'}]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{display:false}},
+      scales:{ y:{ticks:{callback:v=>fmtCurrency(v)}}, x:{grid:{display:false}} }
+    }
+  });
+
+  document.getElementById('drill-order-count').textContent = `top ${d.sample_orders.length} by revenue`;
+  const body = document.getElementById('drill-orders-body');
+  body.innerHTML = '';
+  d.sample_orders.forEach(o => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>#${o.order_id}</td>
+      <td>${o.date}</td>
+      <td class="name">${o.channel}${o.returned ? ' · returned' : ''}</td>
+      <td class="num">${o.units}</td>
+      <td class="num">${fmtCurrencyPrecise(o.revenue)}</td>
+    `;
+    body.appendChild(tr);
+  });
+}
+
+productLines.forEach((line, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'pill' + (i === 0 ? ' active' : '');
+  btn.textContent = line;
+  btn.dataset.line = line;
+  btn.addEventListener('click', () => renderDrill(line));
+  pillWrap.appendChild(btn);
+});
+renderDrill(productLines[0]);
+</script>
+
+</body>
+</html>

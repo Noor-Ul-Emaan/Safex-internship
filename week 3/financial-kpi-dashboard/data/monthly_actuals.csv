@@ -1,0 +1,145 @@
+month,type,category,amount
+2025-01,revenue,Apparel,12632.88
+2025-01,revenue,Beauty,5789.08
+2025-01,revenue,Electronics,46272.4
+2025-01,revenue,Home & Garden,13062.08
+2025-01,revenue,Sports & Outdoors,15004.16
+2025-02,revenue,Apparel,13706.85
+2025-02,revenue,Beauty,4077.89
+2025-02,revenue,Electronics,46177.02
+2025-02,revenue,Home & Garden,12720.13
+2025-02,revenue,Sports & Outdoors,12132.4
+2025-03,revenue,Apparel,13848.9
+2025-03,revenue,Beauty,5586.44
+2025-03,revenue,Electronics,45064.46
+2025-03,revenue,Home & Garden,15613.79
+2025-03,revenue,Sports & Outdoors,11983.71
+2025-04,revenue,Apparel,15510.37
+2025-04,revenue,Beauty,6575.81
+2025-04,revenue,Electronics,41645.06
+2025-04,revenue,Home & Garden,14172.2
+2025-04,revenue,Sports & Outdoors,15744.36
+2025-05,revenue,Apparel,16212.68
+2025-05,revenue,Beauty,5681.0
+2025-05,revenue,Electronics,40383.86
+2025-05,revenue,Home & Garden,10575.4
+2025-05,revenue,Sports & Outdoors,14356.33
+2025-06,revenue,Apparel,15778.49
+2025-06,revenue,Beauty,6686.34
+2025-06,revenue,Electronics,47539.21
+2025-06,revenue,Home & Garden,15634.59
+2025-06,revenue,Sports & Outdoors,16815.53
+2025-07,revenue,Apparel,15152.53
+2025-07,revenue,Beauty,7837.1
+2025-07,revenue,Electronics,54849.52
+2025-07,revenue,Home & Garden,13998.3
+2025-07,revenue,Sports & Outdoors,16474.9
+2025-08,revenue,Apparel,16797.32
+2025-08,revenue,Beauty,7983.03
+2025-08,revenue,Electronics,49524.6
+2025-08,revenue,Home & Garden,19606.13
+2025-08,revenue,Sports & Outdoors,19638.43
+2025-09,revenue,Apparel,16473.1
+2025-09,revenue,Beauty,7335.88
+2025-09,revenue,Electronics,45908.55
+2025-09,revenue,Home & Garden,13411.03
+2025-09,revenue,Sports & Outdoors,14552.1
+2025-10,revenue,Apparel,18429.84
+2025-10,revenue,Beauty,8639.44
+2025-10,revenue,Electronics,60603.94
+2025-10,revenue,Home & Garden,17831.13
+2025-10,revenue,Sports & Outdoors,17463.0
+2025-11,revenue,Apparel,24712.1
+2025-11,revenue,Beauty,9905.57
+2025-11,revenue,Electronics,64994.62
+2025-11,revenue,Home & Garden,25986.29
+2025-11,revenue,Sports & Outdoors,21402.35
+2025-12,revenue,Apparel,23720.38
+2025-12,revenue,Beauty,10987.08
+2025-12,revenue,Electronics,75129.03
+2025-12,revenue,Home & Garden,27565.47
+2025-12,revenue,Sports & Outdoors,29625.49
+2025-01,expense,COGS,36895.14
+2025-01,expense,Marketing & Ads,15526.55
+2025-01,expense,Shipping & Fulfillment,7824.56
+2025-01,expense,Payment Processing,2780.88
+2025-01,expense,Platform & Tech,3345.95
+2025-01,expense,Payroll & Ops,10587.11
+2025-01,expense,Returns & Refunds,4889.1
+2025-02,expense,COGS,35045.96
+2025-02,expense,Marketing & Ads,13347.21
+2025-02,expense,Shipping & Fulfillment,8582.17
+2025-02,expense,Payment Processing,2350.16
+2025-02,expense,Platform & Tech,3093.96
+2025-02,expense,Payroll & Ops,8986.94
+2025-02,expense,Returns & Refunds,3986.97
+2025-03,expense,COGS,36539.8
+2025-03,expense,Marketing & Ads,12880.63
+2025-03,expense,Shipping & Fulfillment,5981.18
+2025-03,expense,Payment Processing,2478.01
+2025-03,expense,Platform & Tech,3437.47
+2025-03,expense,Payroll & Ops,9733.5
+2025-03,expense,Returns & Refunds,4577.52
+2025-04,expense,COGS,33890.38
+2025-04,expense,Marketing & Ads,13825.63
+2025-04,expense,Shipping & Fulfillment,8832.81
+2025-04,expense,Payment Processing,2863.73
+2025-04,expense,Platform & Tech,3032.24
+2025-04,expense,Payroll & Ops,10885.47
+2025-04,expense,Returns & Refunds,5060.67
+2025-05,expense,COGS,30166.52
+2025-05,expense,Marketing & Ads,12299.48
+2025-05,expense,Shipping & Fulfillment,6273.53
+2025-05,expense,Payment Processing,2379.03
+2025-05,expense,Platform & Tech,2780.73
+2025-05,expense,Payroll & Ops,9546.66
+2025-05,expense,Returns & Refunds,4121.97
+2025-06,expense,COGS,40323.37
+2025-06,expense,Marketing & Ads,14884.58
+2025-06,expense,Shipping & Fulfillment,9911.03
+2025-06,expense,Payment Processing,2750.18
+2025-06,expense,Platform & Tech,4018.93
+2025-06,expense,Payroll & Ops,8568.59
+2025-06,expense,Returns & Refunds,5548.93
+2025-07,expense,COGS,43347.47
+2025-07,expense,Marketing & Ads,16788.53
+2025-07,expense,Shipping & Fulfillment,12162.36
+2025-07,expense,Payment Processing,2750.31
+2025-07,expense,Platform & Tech,4128.62
+2025-07,expense,Payroll & Ops,12031.43
+2025-07,expense,Returns & Refunds,5032.68
+2025-08,expense,COGS,41166.97
+2025-08,expense,Marketing & Ads,16793.54
+2025-08,expense,Shipping & Fulfillment,10614.41
+2025-08,expense,Payment Processing,3136.33
+2025-08,expense,Platform & Tech,3943.03
+2025-08,expense,Payroll & Ops,11296.36
+2025-08,expense,Returns & Refunds,4840.34
+2025-09,expense,COGS,38526.45
+2025-09,expense,Marketing & Ads,15591.41
+2025-09,expense,Shipping & Fulfillment,9542.13
+2025-09,expense,Payment Processing,3020.36
+2025-09,expense,Platform & Tech,3799.18
+2025-09,expense,Payroll & Ops,10241.98
+2025-09,expense,Returns & Refunds,4594.63
+2025-10,expense,COGS,48732.17
+2025-10,expense,Marketing & Ads,13822.61
+2025-10,expense,Shipping & Fulfillment,9363.57
+2025-10,expense,Payment Processing,3211.75
+2025-10,expense,Platform & Tech,3425.6
+2025-10,expense,Payroll & Ops,12492.69
+2025-10,expense,Returns & Refunds,5145.84
+2025-11,expense,COGS,59195.01
+2025-11,expense,Marketing & Ads,19293.95
+2025-11,expense,Shipping & Fulfillment,11001.01
+2025-11,expense,Payment Processing,4311.89
+2025-11,expense,Platform & Tech,5033.92
+2025-11,expense,Payroll & Ops,15250.31
+2025-11,expense,Returns & Refunds,6095.93
+2025-12,expense,COGS,66143.93
+2025-12,expense,Marketing & Ads,18674.05
+2025-12,expense,Shipping & Fulfillment,12250.18
+2025-12,expense,Payment Processing,4999.74
+2025-12,expense,Platform & Tech,5435.76
+2025-12,expense,Payroll & Ops,20447.11
+2025-12,expense,Returns & Refunds,7361.6
